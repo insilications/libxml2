@@ -2,7 +2,10 @@
 # This file contains extra pkgconfig build requirements that don't get picked up but are 
 # desirable. One name per line, no whitespace.
 #
-zlib
-liblzma
-icu-i18n
+32icu-i18n
+32liblzma
+32zlib
 bzip2
+icu-i18n
+liblzma
+zlib

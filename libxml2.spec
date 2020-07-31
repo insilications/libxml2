@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : libxml2
 Version  : 2.9.10
-Release  : 83
+Release  : 84
 URL      : https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz
 Source0  : https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz
 Summary  : libXML library version2.
@@ -20,13 +20,22 @@ BuildRequires : buildreq-gnome
 BuildRequires : bzip2-dev
 BuildRequires : bzip2-staticdev
 BuildRequires : findutils
+BuildRequires : gcc-dev32
+BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libstdc++32
+BuildRequires : glibc-dev32
+BuildRequires : glibc-libc32
 BuildRequires : pkg-config
+BuildRequires : pkgconfig(32icu-i18n)
+BuildRequires : pkgconfig(32liblzma)
+BuildRequires : pkgconfig(32zlib)
 BuildRequires : pkgconfig(bzip2)
 BuildRequires : pkgconfig(icu-i18n)
 BuildRequires : pkgconfig(liblzma)
 BuildRequires : pkgconfig(zlib)
 BuildRequires : python3-dev
 BuildRequires : zlib-dev
+BuildRequires : zlib-dev32
 BuildRequires : zlib-staticdev
 # Suppress stripping binaries
 %define __strip /bin/true
@@ -60,6 +69,17 @@ Requires: libxml2 = %{version}-%{release}
 dev components for the libxml2 package.
 
 
+%package dev32
+Summary: dev32 components for the libxml2 package.
+Group: Default
+Requires: libxml2-lib32 = %{version}-%{release}
+Requires: libxml2-bin = %{version}-%{release}
+Requires: libxml2-dev = %{version}-%{release}
+
+%description dev32
+dev32 components for the libxml2 package.
+
+
 %package doc
 Summary: doc components for the libxml2 package.
 Group: Documentation
@@ -75,6 +95,14 @@ Group: Libraries
 
 %description lib
 lib components for the libxml2 package.
+
+
+%package lib32
+Summary: lib32 components for the libxml2 package.
+Group: Default
+
+%description lib32
+lib32 components for the libxml2 package.
 
 
 %package man
@@ -112,19 +140,31 @@ Requires: libxml2-dev = %{version}-%{release}
 staticdev components for the libxml2 package.
 
 
+%package staticdev32
+Summary: staticdev32 components for the libxml2 package.
+Group: Default
+Requires: libxml2-dev = %{version}-%{release}
+
+%description staticdev32
+staticdev32 components for the libxml2 package.
+
+
 %prep
 %setup -q -n libxml2-v2.9.10
 cd %{_builddir}/libxml2-v2.9.10
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+pushd ..
+cp -a libxml2-v2.9.10 build32
+popd
 
 %build
 unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1595814904
+export SOURCE_DATE_EPOCH=1596166624
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -173,6 +213,15 @@ export LDFLAGS="${LDFLAGS_USE}"
 %autogen  --enable-shared --enable-static --with-python=/usr/bin/python3
 make  %{?_smp_mflags}  V=1 VERBOSE=1
 
+pushd ../build32/
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
+%autogen  --enable-shared --enable-static --with-python=/usr/bin/python3 --without-python --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+make  %{?_smp_mflags}  V=1 VERBOSE=1
+popd
 %check
 export LANG=C.UTF-8
 unset http_proxy
@@ -181,12 +230,22 @@ unset no_proxy
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1595814904
+export SOURCE_DATE_EPOCH=1596166624
 rm -rf %{buildroot}
+pushd ../build32/
+%make_install32
+if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
+then
+pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do ln -s $i 32$i ; done
+popd
+fi
+popd
 %make_install
 
 %files
 %defattr(-,root,root,-)
+/usr/lib32/xml2Conf.sh
 /usr/lib64/xml2Conf.sh
 
 %files bin
@@ -249,6 +308,13 @@ rm -rf %{buildroot}
 /usr/lib64/pkgconfig/libxml-2.0.pc
 /usr/share/aclocal/*.m4
 /usr/share/man/man3/libxml.3
+
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/cmake/libxml2/libxml2-config.cmake
+/usr/lib32/libxml2.so
+/usr/lib32/pkgconfig/32libxml-2.0.pc
+/usr/lib32/pkgconfig/libxml-2.0.pc
 
 %files doc
 %defattr(0644,root,root,0755)
@@ -366,6 +432,11 @@ rm -rf %{buildroot}
 /usr/lib64/libxml2.so.2
 /usr/lib64/libxml2.so.2.9.10
 
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libxml2.so.2
+/usr/lib32/libxml2.so.2.9.10
+
 %files man
 %defattr(0644,root,root,0755)
 /usr/share/man/man1/xml2-config.1
@@ -382,3 +453,7 @@ rm -rf %{buildroot}
 %files staticdev
 %defattr(-,root,root,-)
 /usr/lib64/libxml2.a
+
+%files staticdev32
+%defattr(-,root,root,-)
+/usr/lib32/libxml2.a

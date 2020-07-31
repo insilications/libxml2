@@ -2,10 +2,17 @@
 # This file contains extra pkgconfig build requirements that don't get picked up but are 
 # desirable. One name per line, no whitespace.
 #
+buildreq-gnome
 bzip2-dev
-zlib-dev
 bzip2-staticdev
-zlib-staticdev
-python3-dev
-pkg-config
 findutils
+gcc-dev32
+gcc-libgcc32
+gcc-libstdc++32
+glibc-dev32
+glibc-libc32
+pkg-config
+python3-dev
+zlib-dev
+zlib-dev32
+zlib-staticdev
