@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : libxml2
-Version  : 2.9.10
-Release  : 85
-URL      : https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz
-Source0  : https://gitlab.gnome.org/GNOME/libxml2/-/archive/v2.9.10/libxml2-v2.9.10.tar.gz
+Version  : 8317
+Release  : 86
+URL      : file:///aot/build/clearlinux/packages/libxml2/libxml2-8317.tar.gz
+Source0  : file:///aot/build/clearlinux/packages/libxml2/libxml2-8317.tar.gz
 Summary  : libXML library version2.
 Group    : Development/Tools
 License  : MIT
@@ -34,15 +34,15 @@ BuildRequires : pkgconfig(icu-i18n)
 BuildRequires : pkgconfig(liblzma)
 BuildRequires : pkgconfig(zlib)
 BuildRequires : python3-dev
+BuildRequires : python3-staticdev
 BuildRequires : zlib-dev
 BuildRequires : zlib-dev32
 BuildRequires : zlib-staticdev
+BuildRequires : zlib-staticdev32
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
 Patch1: stateless.patch
-Patch2: CVE-2020-7595.patch
-Patch3: CVE-2019-20388.patch
 
 %description
 XML toolkit from the GNOME project
@@ -143,20 +143,18 @@ staticdev components for the libxml2 package.
 %package staticdev32
 Summary: staticdev32 components for the libxml2 package.
 Group: Default
-Requires: libxml2-dev = %{version}-%{release}
+Requires: libxml2-dev32 = %{version}-%{release}
 
 %description staticdev32
 staticdev32 components for the libxml2 package.
 
 
 %prep
-%setup -q -n libxml2-v2.9.10
-cd %{_builddir}/libxml2-v2.9.10
+%setup -q -n libxml2
+cd %{_builddir}/libxml2
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 pushd ..
-cp -a libxml2-v2.9.10 build32
+cp -a libxml2 build32
 popd
 
 %build
@@ -165,7 +163,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1599677608
+export SOURCE_DATE_EPOCH=1615148468
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -173,28 +171,25 @@ export NM=gcc-nm
 ## altflags_pgo content
 ## pgo generate
 export PGO_GEN="-fprofile-generate=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-arcs -ftest-coverage --coverage -fprofile-partial-training"
-export CFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
-export FCFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
-export FFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
-export CXXFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe -fPIC -ffat-lto-objects $PGO_GEN"
-export LDFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
+export CFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
+export FCFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
+export FFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
+export CXXFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe -fPIC -ffat-lto-objects $PGO_GEN"
+export LDFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-math-errno -fno-trapping-math -pipe -fPIC -ffat-lto-objects $PGO_GEN"
 ## pgo use
 ## -ffat-lto-objects -fno-PIE -fno-PIE -m64 -no-pie -fpic -fvisibility=hidden
 ## gcc: -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT
 export PGO_USE="-fprofile-use=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-correction -fprofile-partial-training"
-export CFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
-export FCFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
-export FFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
-export CXXFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -fPIC -ffat-lto-objects $PGO_USE"
-export LDFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
-export AR=gcc-ar
-export RANLIB=gcc-ranlib
-export NM=gcc-nm
+export CFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
+export FCFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
+export FFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
+export CXXFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -fPIC -ffat-lto-objects $PGO_USE"
+export LDFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -pipe -fPIC -ffat-lto-objects $PGO_USE"
+export AR=/usr/bin/gcc-ar
+export RANLIB=/usr/bin/gcc-ranlib
+export NM=/usr/bin/gcc-nm
 #export CCACHE_DISABLE=1
 ## altflags_pgo end
-##
-%define _lto_cflags 1
-##
 export CFLAGS="${CFLAGS_GENERATE}"
 export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
@@ -214,13 +209,13 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%autogen  --enable-shared --enable-static --with-python=/usr/bin/python3
+%autogen
 make  %{?_smp_mflags}  V=1 VERBOSE=1
 
 pushd ../build32/
-export CFLAGS="-g -O2 -fuse-linker-plugin -pipe"
-export CXXFLAGS="-g -O2 -fuse-linker-plugin -fvisibility-inlines-hidden -pipe"
-export LDFLAGS="-g -O2 -fuse-linker-plugin -pipe"
+export CFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export CXXFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export LDFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
@@ -243,7 +238,7 @@ export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1599677608
+export SOURCE_DATE_EPOCH=1615148468
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -258,8 +253,6 @@ popd
 
 %files
 %defattr(-,root,root,-)
-/usr/lib32/xml2Conf.sh
-/usr/lib64/xml2Conf.sh
 
 %files bin
 %defattr(-,root,root,-)
@@ -316,9 +309,11 @@ popd
 /usr/include/libxml2/libxml/xpath.h
 /usr/include/libxml2/libxml/xpathInternals.h
 /usr/include/libxml2/libxml/xpointer.h
+/usr/lib32/xml2Conf.sh
 /usr/lib64/cmake/libxml2/libxml2-config.cmake
 /usr/lib64/libxml2.so
 /usr/lib64/pkgconfig/libxml-2.0.pc
+/usr/lib64/xml2Conf.sh
 /usr/share/aclocal/*.m4
 /usr/share/man/man3/libxml.3
 
@@ -331,7 +326,162 @@ popd
 
 %files doc
 %defattr(0644,root,root,0755)
-%doc /usr/share/doc/libxml2/*
+/usr/share/doc/libxml2-2.9.10/Copyright
+/usr/share/doc/libxml2-2.9.10/examples/testHTML.c
+/usr/share/doc/libxml2-2.9.10/examples/testSAX.c
+/usr/share/doc/libxml2-2.9.10/examples/testXPath.c
+/usr/share/doc/libxml2-2.9.10/examples/xmllint.c
+/usr/share/doc/libxml2-2.9.10/html/DOM.gif
+/usr/share/doc/libxml2-2.9.10/html/FAQ.html
+/usr/share/doc/libxml2-2.9.10/html/Libxml2-Logo-180x168.gif
+/usr/share/doc/libxml2-2.9.10/html/Libxml2-Logo-90x34.gif
+/usr/share/doc/libxml2-2.9.10/html/encoding.html
+/usr/share/doc/libxml2-2.9.10/html/examples.xml
+/usr/share/doc/libxml2-2.9.10/html/examples.xsl
+/usr/share/doc/libxml2-2.9.10/html/html/book1.html
+/usr/share/doc/libxml2-2.9.10/html/html/home.png
+/usr/share/doc/libxml2-2.9.10/html/html/index.html
+/usr/share/doc/libxml2-2.9.10/html/html/left.png
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-DOCBparser.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-HTMLparser.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-HTMLtree.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-SAX.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-SAX2.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-c14n.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-catalog.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-chvalid.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-debugXML.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-dict.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-encoding.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-entities.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-globals.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-hash.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-lib.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-list.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-nanoftp.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-nanohttp.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-parser.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-parserInternals.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-pattern.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-relaxng.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-schemasInternals.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-schematron.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-threads.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-tree.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-uri.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-valid.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xinclude.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xlink.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlIO.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlautomata.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlerror.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlexports.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlmemory.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlmodule.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlreader.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlregexp.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlsave.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlschemas.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlschemastypes.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlstring.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlunicode.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlversion.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xmlwriter.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xpath.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xpathInternals.html
+/usr/share/doc/libxml2-2.9.10/html/html/libxml-xpointer.html
+/usr/share/doc/libxml2-2.9.10/html/html/right.png
+/usr/share/doc/libxml2-2.9.10/html/html/up.png
+/usr/share/doc/libxml2-2.9.10/html/index.html
+/usr/share/doc/libxml2-2.9.10/html/io1.c
+/usr/share/doc/libxml2-2.9.10/html/io1.res
+/usr/share/doc/libxml2-2.9.10/html/io2.c
+/usr/share/doc/libxml2-2.9.10/html/io2.res
+/usr/share/doc/libxml2-2.9.10/html/libxml.gif
+/usr/share/doc/libxml2-2.9.10/html/parse1.c
+/usr/share/doc/libxml2-2.9.10/html/parse2.c
+/usr/share/doc/libxml2-2.9.10/html/parse3.c
+/usr/share/doc/libxml2-2.9.10/html/parse4.c
+/usr/share/doc/libxml2-2.9.10/html/reader1.c
+/usr/share/doc/libxml2-2.9.10/html/reader1.res
+/usr/share/doc/libxml2-2.9.10/html/reader2.c
+/usr/share/doc/libxml2-2.9.10/html/reader3.c
+/usr/share/doc/libxml2-2.9.10/html/reader3.res
+/usr/share/doc/libxml2-2.9.10/html/reader4.c
+/usr/share/doc/libxml2-2.9.10/html/reader4.res
+/usr/share/doc/libxml2-2.9.10/html/redhat.gif
+/usr/share/doc/libxml2-2.9.10/html/smallfootonly.gif
+/usr/share/doc/libxml2-2.9.10/html/structure.gif
+/usr/share/doc/libxml2-2.9.10/html/test1.xml
+/usr/share/doc/libxml2-2.9.10/html/test2.xml
+/usr/share/doc/libxml2-2.9.10/html/test3.xml
+/usr/share/doc/libxml2-2.9.10/html/testWriter.c
+/usr/share/doc/libxml2-2.9.10/html/tree1.c
+/usr/share/doc/libxml2-2.9.10/html/tree1.res
+/usr/share/doc/libxml2-2.9.10/html/tree2.c
+/usr/share/doc/libxml2-2.9.10/html/tree2.res
+/usr/share/doc/libxml2-2.9.10/html/tst.xml
+/usr/share/doc/libxml2-2.9.10/html/tutorial/apa.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/apb.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/apc.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/apd.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ape.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/apf.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/apg.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/aph.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/api.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ar01s02.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ar01s03.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ar01s04.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ar01s05.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ar01s06.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ar01s07.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ar01s08.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ar01s09.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/customfo.xsl
+/usr/share/doc/libxml2-2.9.10/html/tutorial/customhtml.xsl
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/blank.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/1.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/10.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/2.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/3.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/4.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/5.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/6.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/7.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/8.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/callouts/9.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/caution.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/draft.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/home.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/important.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/next.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/note.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/prev.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/tip.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/toc-blank.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/toc-minus.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/toc-plus.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/up.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/images/warning.png
+/usr/share/doc/libxml2-2.9.10/html/tutorial/includeaddattribute.c
+/usr/share/doc/libxml2-2.9.10/html/tutorial/includeaddkeyword.c
+/usr/share/doc/libxml2-2.9.10/html/tutorial/includeconvert.c
+/usr/share/doc/libxml2-2.9.10/html/tutorial/includegetattribute.c
+/usr/share/doc/libxml2-2.9.10/html/tutorial/includekeyword.c
+/usr/share/doc/libxml2-2.9.10/html/tutorial/includestory.xml
+/usr/share/doc/libxml2-2.9.10/html/tutorial/includexpath.c
+/usr/share/doc/libxml2-2.9.10/html/tutorial/index.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/ix01.html
+/usr/share/doc/libxml2-2.9.10/html/tutorial/xmltutorial.pdf
+/usr/share/doc/libxml2-2.9.10/html/tutorial/xmltutorial.xml
+/usr/share/doc/libxml2-2.9.10/html/w3c.png
+/usr/share/doc/libxml2-2.9.10/html/writer.xml
+/usr/share/doc/libxml2-2.9.10/html/xml.html
+/usr/share/doc/libxml2-2.9.10/html/xpath1.c
+/usr/share/doc/libxml2-2.9.10/html/xpath1.res
+/usr/share/doc/libxml2-2.9.10/html/xpath2.c
+/usr/share/doc/libxml2-2.9.10/html/xpath2.res
 /usr/share/doc/libxml2-python-2.9.10/TODO
 /usr/share/doc/libxml2-python-2.9.10/examples/attribs.py
 /usr/share/doc/libxml2-python-2.9.10/examples/build.py
