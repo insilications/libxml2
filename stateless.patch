@@ -13,5 +13,5 @@ Index: libxml2-2.9.2/catalog.c
 -#define XML_SGML_DEFAULT_CATALOG "file:///etc/sgml/catalog"
 +#define XML_SGML_DEFAULT_CATALOG "file:///etc/sgml/catalog file:///usr/share/defaults/sgml/catalog"
  #endif
- 
+
  #if defined(_WIN32) && defined(_MSC_VER)

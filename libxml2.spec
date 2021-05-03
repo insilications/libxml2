@@ -41,9 +41,6 @@ BuildRequires : expat-dev32
 BuildRequires : expat-staticdev
 BuildRequires : expat-staticdev32
 BuildRequires : expect
-BuildRequires : fakechroot
-BuildRequires : fakechroot-dev
-BuildRequires : fakechroot-staticdev
 BuildRequires : file-dev
 BuildRequires : findutils
 BuildRequires : flex
@@ -61,7 +58,6 @@ BuildRequires : gdb
 BuildRequires : gdb-dev
 BuildRequires : gettext-bin
 BuildRequires : git
-BuildRequires : glibc-abi
 BuildRequires : glibc-bench
 BuildRequires : glibc-bin
 BuildRequires : glibc-dev
@@ -89,8 +85,6 @@ BuildRequires : libtool
 BuildRequires : libtool-dev
 BuildRequires : libunwind
 BuildRequires : libunwind-dev
-BuildRequires : libxml2-dev
-BuildRequires : libxml2-staticdev
 BuildRequires : lrzip-dev
 BuildRequires : lrzip-staticdev
 BuildRequires : lz4-dev
@@ -99,6 +93,7 @@ BuildRequires : lzo-dev
 BuildRequires : lzo-dev32
 BuildRequires : lzo-staticdev
 BuildRequires : lzo-staticdev32
+BuildRequires : openssl
 BuildRequires : openssl-dev
 BuildRequires : openssl-dev32
 BuildRequires : openssl-staticdev
@@ -255,7 +250,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1618663243
+export SOURCE_DATE_EPOCH=1620031013
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -315,7 +310,7 @@ make dba100000.xml
 ./xmllint --stream  dba100000.xml
 ./xmllint --noout --valid test/valid/REC-xml-19980210.xml
 ./xmllint --stream --valid test/valid/REC-xml-19980210.xml
-make -j1 VERBOSE=1 V=1 check || :
+make -j16 VERBOSE=1 V=1 check || :
 make clean
 export CFLAGS="${CFLAGS_USE}"
 export CXXFLAGS="${CXXFLAGS_USE}"
@@ -343,15 +338,15 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1618663243
+export SOURCE_DATE_EPOCH=1620031013
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
 then
-pushd %{buildroot}/usr/lib32/pkgconfig
-for i in *.pc ; do ln -s $i 32$i ; done
-popd
+    pushd %{buildroot}/usr/lib32/pkgconfig
+    for i in *.pc ; do ln -s $i 32$i ; done
+    popd
 fi
 popd
 %make_install

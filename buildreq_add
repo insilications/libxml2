@@ -27,9 +27,6 @@ expat-dev32
 expat-staticdev
 expat-staticdev32
 expect
-fakechroot
-fakechroot-dev
-fakechroot-staticdev
 file-dev
 findutils
 flex
@@ -47,7 +44,6 @@ gdb
 gdb-dev
 gettext-bin
 git
-glibc-abi
 glibc-bench
 glibc-bin
 glibc-dev
@@ -75,8 +71,6 @@ libtool
 libtool-dev
 libunwind
 libunwind-dev
-libxml2-dev
-libxml2-staticdev
 lrzip-dev
 lrzip-staticdev
 lz4-dev
@@ -85,6 +79,7 @@ lzo-dev
 lzo-dev32
 lzo-staticdev
 lzo-staticdev32
+openssl
 openssl-dev
 openssl-dev32
 openssl-staticdev
