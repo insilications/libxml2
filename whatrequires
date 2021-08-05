@@ -17,6 +17,8 @@ colord-gtk-dev
 compat-gtksourceview-soname3-dev
 createrepo_c-dev
 devhelp-dev
+efl-dev
+enlightenment-dev
 eog-dev
 evince-dev
 evolution-data-server-dev

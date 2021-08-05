@@ -1,1 +1,1 @@
---without-python
+--enable-shared --enable-static --without-python
