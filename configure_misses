@@ -1,1 +1,2 @@
+Configure miss: whether __attribute__((destructor)) is accepted
 Configure miss: whether va_list is an array type
