@@ -5,17 +5,12 @@
 %define keepstatic 1
 Name     : libxml2
 Version  : 2.9.12
-Release  : 402
+Release  : 403
 URL      : file:///aot/build/clearlinux/packages/libxml2/libxml2-v2.9.12.tar.gz
 Source0  : file:///aot/build/clearlinux/packages/libxml2/libxml2-v2.9.12.tar.gz
 Summary  : libXML library version2.
 Group    : Development/Tools
 License  : MIT
-Requires: libxml2-bin = %{version}-%{release}
-Requires: libxml2-lib = %{version}-%{release}
-Requires: libxml2-man = %{version}-%{release}
-Requires: libxml2-python = %{version}-%{release}
-Requires: libxml2-python3 = %{version}-%{release}
 BuildRequires : acl-dev
 BuildRequires : acl-dev32
 BuildRequires : acl-staticdev
@@ -129,106 +124,6 @@ XML toolkit from the GNOME project
 Full documentation is available on-line at
 http://xmlsoft.org/
 
-%package bin
-Summary: bin components for the libxml2 package.
-Group: Binaries
-
-%description bin
-bin components for the libxml2 package.
-
-
-%package dev
-Summary: dev components for the libxml2 package.
-Group: Development
-Requires: libxml2-lib = %{version}-%{release}
-Requires: libxml2-bin = %{version}-%{release}
-Provides: libxml2-devel = %{version}-%{release}
-Requires: libxml2 = %{version}-%{release}
-
-%description dev
-dev components for the libxml2 package.
-
-
-%package dev32
-Summary: dev32 components for the libxml2 package.
-Group: Default
-Requires: libxml2-lib32 = %{version}-%{release}
-Requires: libxml2-bin = %{version}-%{release}
-Requires: libxml2-dev = %{version}-%{release}
-
-%description dev32
-dev32 components for the libxml2 package.
-
-
-%package doc
-Summary: doc components for the libxml2 package.
-Group: Documentation
-Requires: libxml2-man = %{version}-%{release}
-
-%description doc
-doc components for the libxml2 package.
-
-
-%package lib
-Summary: lib components for the libxml2 package.
-Group: Libraries
-
-%description lib
-lib components for the libxml2 package.
-
-
-%package lib32
-Summary: lib32 components for the libxml2 package.
-Group: Default
-
-%description lib32
-lib32 components for the libxml2 package.
-
-
-%package man
-Summary: man components for the libxml2 package.
-Group: Default
-
-%description man
-man components for the libxml2 package.
-
-
-%package python
-Summary: python components for the libxml2 package.
-Group: Default
-Requires: libxml2-python3 = %{version}-%{release}
-
-%description python
-python components for the libxml2 package.
-
-
-%package python3
-Summary: python3 components for the libxml2 package.
-Group: Default
-Requires: python3-core
-
-%description python3
-python3 components for the libxml2 package.
-
-
-%package staticdev
-Summary: staticdev components for the libxml2 package.
-Group: Default
-Requires: libxml2-dev = %{version}-%{release}
-
-%description staticdev
-staticdev components for the libxml2 package.
-
-
-%package staticdev32
-Summary: staticdev32 components for the libxml2 package.
-Group: Default
-Requires: libxml2-dev32 = %{version}-%{release}
-
-%description staticdev32
-staticdev32 components for the libxml2 package.
-
-
 %prep
 %setup -q -n libxml2
 cd %{_builddir}/libxml2
@@ -243,33 +138,36 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1638037146
+export SOURCE_DATE_EPOCH=1639123795
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 ## altflags_pgo content
 ## pgo generate
+unset ASFLAGS
 export PGO_GEN="-fprofile-generate=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-arcs -ftest-coverage -fprofile-partial-training -fprofile-correction -freorder-functions --coverage -lgcov"
-export CFLAGS_GENERATE="-Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
-export FCFLAGS_GENERATE="-Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
-export FFLAGS_GENERATE="-Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
-export CXXFLAGS_GENERATE="-Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
-export LDFLAGS_GENERATE="-Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
-export LIBS="-lgcov"
+export CFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export ASMFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export FCFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export FFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export CXXFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export LDFLAGS_GENERATE="-O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_GEN"
+export LIBS_GENERATE="-lgcov"
 ## pgo use
-## -fno-tree-vectorize: disable -ftree-vectorize thus disable -ftree-loop-vectorize and -ftree-slp-vectorize
+## -fno-tree-vectorize: disable -ftree-vectorize thus disable -ftree-loop-vectorize and -ftree-slp-vectorize -fopt-info-vec
 ## -Ofast -ffast-math
 ## -funroll-loops maybe dangerous
 ## -Wl,-z,max-page-size=0x1000
 ## -pthread -lpthread
 ## -Wl,-Bsymbolic-functions
 export PGO_USE="-Wmissing-profile -Wcoverage-mismatch -fprofile-use=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-partial-training -fprofile-correction -freorder-functions"
-export CFLAGS_USE="-g3 -ggdb -Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
-export FCFLAGS_USE="-g3 -ggdb -Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
-export FFLAGS_USE="-g3 -ggdb -Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
-export CXXFLAGS_USE="-g3 -ggdb -Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
-export LDFLAGS_USE="-g3 -ggdb -Ofast --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export CFLAGS_USE="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export ASMFLAGS_USE="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export FCFLAGS_USE="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export FFLAGS_USE="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export CXXFLAGS_USE="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
+export LDFLAGS_USE="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now,-z,relro,-z,max-page-size=0x1000,-z,separate-code -Wno-error -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=auto -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc $PGO_USE"
 #
 export AR=/usr/bin/gcc-ar
 export RANLIB=/usr/bin/gcc-ranlib
@@ -293,6 +191,8 @@ export CCACHE_BASEDIR=/builddir/build/BUILD
 #export CCACHE_LOGFILE=/var/tmp/ccache/cache.debug
 #export CCACHE_DEBUG=true
 #export CCACHE_NODIRECT=true
+#
+export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:/usr/share/pkgconfig"
 #
 export LD_LIBRARY_PATH="/usr/nvidia/lib64:/usr/nvidia/lib64/vdpau:/usr/nvidia/lib64/xorg/modules/drivers:/usr/nvidia/lib64/xorg/modules/extensions:/usr/local/cuda/lib64:/usr/lib64/haswell:/usr/lib64/haswell/pulseaudio:/usr/lib64/haswell/alsa-lib:/usr/lib64/haswell/gstreamer-1.0:/usr/lib64/haswell/pipewire-0.3:/usr/lib64/haswell/spa-0.2:/usr/lib64/dri:/usr/lib64/chromium:/usr/lib64:/usr/lib64/pulseaudio:/usr/lib64/alsa-lib:/usr/lib64/gstreamer-1.0:/usr/lib64/pipewire-0.3:/usr/lib64/spa-0.2:/usr/lib:/aot/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/aot/intel/oneapi/compiler/latest/linux/lib:/aot/intel/oneapi/mkl/latest/lib/intel64:/aot/intel/oneapi/tbb/latest/lib/intel64/gcc4.8:/usr/share:/usr/lib64/wine:/usr/nvidia/lib32:/usr/nvidia/lib32/vdpau:/usr/lib32:/usr/lib32/wine"
 #
@@ -335,6 +235,7 @@ export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
+export ASMFLAGS="${ASMFLAGS_GENERATE}"
 export LIBS="${LIBS_GENERATE}"
 %autogen  --enable-shared --enable-static --with-python=/usr/bin/python3
 make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
@@ -361,7 +262,8 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-unset LIBS
+export ASMFLAGS="${ASMFLAGS_USE}"
+export LIBS="${LIBS_USE}"
 %autogen  --enable-shared --enable-static --with-python=/usr/bin/python3
 make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 fi
@@ -383,6 +285,7 @@ unset LDFLAGS
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/share/pkgconfig"
 export ASFLAGS="--32"
 export CFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -march=native -mtune=native -m32 -mstackrealign"
+export ASMFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -march=native -mtune=native -m32 -mstackrealign"
 export CXXFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -march=native -mtune=native -m32 -mstackrealign"
 export FCFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -march=native -mtune=native -m32 -mstackrealign"
 export FFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -march=native -mtune=native -m32 -mstackrealign"
@@ -393,7 +296,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1638037146
+export SOURCE_DATE_EPOCH=1639123795
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -414,217 +317,3 @@ popd
 
 %files
 %defattr(-,root,root,-)
-
-%files bin
-%defattr(-,root,root,-)
-/usr/bin/xml2-config
-/usr/bin/xmlcatalog
-/usr/bin/xmllint
-
-%files dev
-%defattr(-,root,root,-)
-/usr/include/libxml2/libxml/DOCBparser.h
-/usr/include/libxml2/libxml/HTMLparser.h
-/usr/include/libxml2/libxml/HTMLtree.h
-/usr/include/libxml2/libxml/SAX.h
-/usr/include/libxml2/libxml/SAX2.h
-/usr/include/libxml2/libxml/c14n.h
-/usr/include/libxml2/libxml/catalog.h
-/usr/include/libxml2/libxml/chvalid.h
-/usr/include/libxml2/libxml/debugXML.h
-/usr/include/libxml2/libxml/dict.h
-/usr/include/libxml2/libxml/encoding.h
-/usr/include/libxml2/libxml/entities.h
-/usr/include/libxml2/libxml/globals.h
-/usr/include/libxml2/libxml/hash.h
-/usr/include/libxml2/libxml/list.h
-/usr/include/libxml2/libxml/nanoftp.h
-/usr/include/libxml2/libxml/nanohttp.h
-/usr/include/libxml2/libxml/parser.h
-/usr/include/libxml2/libxml/parserInternals.h
-/usr/include/libxml2/libxml/pattern.h
-/usr/include/libxml2/libxml/relaxng.h
-/usr/include/libxml2/libxml/schemasInternals.h
-/usr/include/libxml2/libxml/schematron.h
-/usr/include/libxml2/libxml/threads.h
-/usr/include/libxml2/libxml/tree.h
-/usr/include/libxml2/libxml/uri.h
-/usr/include/libxml2/libxml/valid.h
-/usr/include/libxml2/libxml/xinclude.h
-/usr/include/libxml2/libxml/xlink.h
-/usr/include/libxml2/libxml/xmlIO.h
-/usr/include/libxml2/libxml/xmlautomata.h
-/usr/include/libxml2/libxml/xmlerror.h
-/usr/include/libxml2/libxml/xmlexports.h
-/usr/include/libxml2/libxml/xmlmemory.h
-/usr/include/libxml2/libxml/xmlmodule.h
-/usr/include/libxml2/libxml/xmlreader.h
-/usr/include/libxml2/libxml/xmlregexp.h
-/usr/include/libxml2/libxml/xmlsave.h
-/usr/include/libxml2/libxml/xmlschemas.h
-/usr/include/libxml2/libxml/xmlschemastypes.h
-/usr/include/libxml2/libxml/xmlstring.h
-/usr/include/libxml2/libxml/xmlunicode.h
-/usr/include/libxml2/libxml/xmlversion.h
-/usr/include/libxml2/libxml/xmlwriter.h
-/usr/include/libxml2/libxml/xpath.h
-/usr/include/libxml2/libxml/xpathInternals.h
-/usr/include/libxml2/libxml/xpointer.h
-/usr/lib32/xml2Conf.sh
-/usr/lib64/cmake/libxml2/libxml2-config.cmake
-/usr/lib64/libxml2.la
-/usr/lib64/libxml2.so
-/usr/lib64/pkgconfig/libxml-2.0.pc
-/usr/lib64/xml2Conf.sh
-/usr/share/aclocal/*.m4
-
-%files dev32
-%defattr(-,root,root,-)
-/usr/lib32/cmake/libxml2/libxml2-config.cmake
-/usr/lib32/libxml2.la
-/usr/lib32/libxml2.so
-/usr/lib32/pkgconfig/32libxml-2.0.pc
-/usr/lib32/pkgconfig/libxml-2.0.pc
-
-%files doc
-%defattr(0644,root,root,0755)
-%doc /usr/share/doc/libxml2/*
-/usr/share/doc/libxml2-python-2.9.12/TODO
-/usr/share/doc/libxml2-python-2.9.12/examples/attribs.py
-/usr/share/doc/libxml2-python-2.9.12/examples/build.py
-/usr/share/doc/libxml2-python-2.9.12/examples/compareNodes.py
-/usr/share/doc/libxml2-python-2.9.12/examples/ctxterror.py
-/usr/share/doc/libxml2-python-2.9.12/examples/cutnpaste.py
-/usr/share/doc/libxml2-python-2.9.12/examples/dtdvalid.py
-/usr/share/doc/libxml2-python-2.9.12/examples/error.py
-/usr/share/doc/libxml2-python-2.9.12/examples/inbuf.py
-/usr/share/doc/libxml2-python-2.9.12/examples/indexes.py
-/usr/share/doc/libxml2-python-2.9.12/examples/input_callback.py
-/usr/share/doc/libxml2-python-2.9.12/examples/invalid.xml
-/usr/share/doc/libxml2-python-2.9.12/examples/nsdel.py
-/usr/share/doc/libxml2-python-2.9.12/examples/outbuf.py
-/usr/share/doc/libxml2-python-2.9.12/examples/push.py
-/usr/share/doc/libxml2-python-2.9.12/examples/pushSAX.py
-/usr/share/doc/libxml2-python-2.9.12/examples/pushSAXhtml.py
-/usr/share/doc/libxml2-python-2.9.12/examples/reader.py
-/usr/share/doc/libxml2-python-2.9.12/examples/reader2.py
-/usr/share/doc/libxml2-python-2.9.12/examples/reader3.py
-/usr/share/doc/libxml2-python-2.9.12/examples/reader4.py
-/usr/share/doc/libxml2-python-2.9.12/examples/reader5.py
-/usr/share/doc/libxml2-python-2.9.12/examples/reader6.py
-/usr/share/doc/libxml2-python-2.9.12/examples/reader7.py
-/usr/share/doc/libxml2-python-2.9.12/examples/reader8.py
-/usr/share/doc/libxml2-python-2.9.12/examples/readererr.py
-/usr/share/doc/libxml2-python-2.9.12/examples/readernext.py
-/usr/share/doc/libxml2-python-2.9.12/examples/regexp.py
-/usr/share/doc/libxml2-python-2.9.12/examples/relaxng.py
-/usr/share/doc/libxml2-python-2.9.12/examples/resolver.py
-/usr/share/doc/libxml2-python-2.9.12/examples/schema.py
-/usr/share/doc/libxml2-python-2.9.12/examples/serialize.py
-/usr/share/doc/libxml2-python-2.9.12/examples/sync.py
-/usr/share/doc/libxml2-python-2.9.12/examples/test.dtd
-/usr/share/doc/libxml2-python-2.9.12/examples/thread2.py
-/usr/share/doc/libxml2-python-2.9.12/examples/tst.py
-/usr/share/doc/libxml2-python-2.9.12/examples/tst.xml
-/usr/share/doc/libxml2-python-2.9.12/examples/tstLastError.py
-/usr/share/doc/libxml2-python-2.9.12/examples/tstURI.py
-/usr/share/doc/libxml2-python-2.9.12/examples/tstmem.py
-/usr/share/doc/libxml2-python-2.9.12/examples/tstxpath.py
-/usr/share/doc/libxml2-python-2.9.12/examples/valid.xml
-/usr/share/doc/libxml2-python-2.9.12/examples/validDTD.py
-/usr/share/doc/libxml2-python-2.9.12/examples/validRNG.py
-/usr/share/doc/libxml2-python-2.9.12/examples/validSchemas.py
-/usr/share/doc/libxml2-python-2.9.12/examples/validate.py
-/usr/share/doc/libxml2-python-2.9.12/examples/walker.py
-/usr/share/doc/libxml2-python-2.9.12/examples/xpath.py
-/usr/share/doc/libxml2-python-2.9.12/examples/xpathext.py
-/usr/share/doc/libxml2-python-2.9.12/examples/xpathleak.py
-/usr/share/doc/libxml2-python-2.9.12/examples/xpathns.py
-/usr/share/doc/libxml2-python-2.9.12/examples/xpathret.py
-/usr/share/gtk-doc/html/libxml2/general.html
-/usr/share/gtk-doc/html/libxml2/home.png
-/usr/share/gtk-doc/html/libxml2/index.html
-/usr/share/gtk-doc/html/libxml2/left.png
-/usr/share/gtk-doc/html/libxml2/libxml2-DOCBparser.html
-/usr/share/gtk-doc/html/libxml2/libxml2-HTMLparser.html
-/usr/share/gtk-doc/html/libxml2/libxml2-HTMLtree.html
-/usr/share/gtk-doc/html/libxml2/libxml2-SAX.html
-/usr/share/gtk-doc/html/libxml2/libxml2-SAX2.html
-/usr/share/gtk-doc/html/libxml2/libxml2-c14n.html
-/usr/share/gtk-doc/html/libxml2/libxml2-catalog.html
-/usr/share/gtk-doc/html/libxml2/libxml2-chvalid.html
-/usr/share/gtk-doc/html/libxml2/libxml2-debugXML.html
-/usr/share/gtk-doc/html/libxml2/libxml2-dict.html
-/usr/share/gtk-doc/html/libxml2/libxml2-encoding.html
-/usr/share/gtk-doc/html/libxml2/libxml2-entities.html
-/usr/share/gtk-doc/html/libxml2/libxml2-globals.html
-/usr/share/gtk-doc/html/libxml2/libxml2-hash.html
-/usr/share/gtk-doc/html/libxml2/libxml2-list.html
-/usr/share/gtk-doc/html/libxml2/libxml2-nanoftp.html
-/usr/share/gtk-doc/html/libxml2/libxml2-nanohttp.html
-/usr/share/gtk-doc/html/libxml2/libxml2-parser.html
-/usr/share/gtk-doc/html/libxml2/libxml2-parserInternals.html
-/usr/share/gtk-doc/html/libxml2/libxml2-pattern.html
-/usr/share/gtk-doc/html/libxml2/libxml2-relaxng.html
-/usr/share/gtk-doc/html/libxml2/libxml2-schemasInternals.html
-/usr/share/gtk-doc/html/libxml2/libxml2-schematron.html
-/usr/share/gtk-doc/html/libxml2/libxml2-threads.html
-/usr/share/gtk-doc/html/libxml2/libxml2-tree.html
-/usr/share/gtk-doc/html/libxml2/libxml2-uri.html
-/usr/share/gtk-doc/html/libxml2/libxml2-valid.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xinclude.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xlink.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlIO.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlautomata.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlerror.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlexports.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlmemory.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlmodule.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlreader.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlregexp.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlsave.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlschemas.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlschemastypes.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlstring.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlunicode.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlversion.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xmlwriter.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xpath.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xpathInternals.html
-/usr/share/gtk-doc/html/libxml2/libxml2-xpointer.html
-/usr/share/gtk-doc/html/libxml2/libxml2.devhelp
-/usr/share/gtk-doc/html/libxml2/right.png
-/usr/share/gtk-doc/html/libxml2/style.css
-/usr/share/gtk-doc/html/libxml2/up.png
-
-%files lib
-%defattr(-,root,root,-)
-/usr/lib64/libxml2.so.2
-/usr/lib64/libxml2.so.2.9.12
-
-%files lib32
-%defattr(-,root,root,-)
-/usr/lib32/libxml2.so.2
-/usr/lib32/libxml2.so.2.9.12
-
-%files man
-%defattr(0644,root,root,0755)
-/usr/share/man/man1/xml2-config.1
-/usr/share/man/man1/xmlcatalog.1
-/usr/share/man/man1/xmllint.1
-/usr/share/man/man3/libxml.3
-
-%files python
-%defattr(-,root,root,-)
-
-%files python3
-%defattr(-,root,root,-)
-/usr/lib/python3*/*
-
-%files staticdev
-%defattr(-,root,root,-)
-/usr/lib64/libxml2.a
-
-%files staticdev32
-%defattr(-,root,root,-)
-/usr/lib32/libxml2.a
