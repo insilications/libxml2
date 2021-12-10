@@ -664,6 +664,8 @@ libxklavier-dev
 libxml2
 libxml2-dev
 libxml2-dev32
+libxml2-staticdev
+libxml2-staticdev32
 libxslt
 libxslt-dev
 libxslt-dev32
