@@ -1,5 +1,5 @@
 make dba100000.xml
-make -j1 check || :
+make -j1 check V=1 VERBOSE=1 || :
 ./xmllint --noout  dba100000.xml
 ./xmllint --stream  dba100000.xml
 ./xmllint --noout --valid test/valid/REC-xml-19980210.xml
